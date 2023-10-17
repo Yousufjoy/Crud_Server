@@ -30,6 +30,7 @@ async function run() {
 
     //1) Get data from frontEnd
     app.get("/users", async (req, res) => {
+      //db code
       const cursor = usersCollection.find();
       const result = await cursor.toArray();
       res.send(result);
@@ -39,6 +40,7 @@ async function run() {
     app.post("/users", async (req, res) => {
       const user = req.body;
       console.log("New user", user);
+      //db code
       const result = await usersCollection.insertOne(user);
       res.send(result);
     });
@@ -48,6 +50,7 @@ async function run() {
     app.delete("/users/:id", async (req, res) => {
       const id = req.params.id;
       console.log("Please delete from db", id);
+      //db code
       const query = { _id: new ObjectId(id) }; // Ekhane Object id evabe use korte hobe karon data base ei format ase check korte paro!
       const result = await usersCollection.deleteOne(query);
       res.send(result);
