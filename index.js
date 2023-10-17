@@ -6,10 +6,7 @@ const port = process.env.PORT || 5000;
 
 // middleWare
 app.use(cors());
-app.use(express.json());
-
-//YousufJoy
-//CiCtcrHkLtrPLevv
+app.use(express.json()); // eta set na korle body undefined thakto
 
 const uri =
   "mongodb+srv://YousufJoy:Esdwb76KLVXUzzgb@cluster0.b9hatji.mongodb.net/?retryWrites=true&w=majority";
@@ -27,6 +24,12 @@ async function run() {
   try {
     // Connect the client to the server	(optional starting in v4.7)
     await client.connect();
+
+    app.post("/users", async (req, res) => {
+      const user = req.body;
+      console.log("New user", user);
+    });
+
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
     console.log(
