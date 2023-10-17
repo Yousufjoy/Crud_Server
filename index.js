@@ -28,12 +28,19 @@ async function run() {
     const database = client.db("usersDB");
     const usersCollection = database.collection("users");
 
-    //1) Get data from frontEnd
+    //1) Get all users data from frontEnd
     app.get("/users", async (req, res) => {
       //db code
       const cursor = usersCollection.find();
       const result = await cursor.toArray();
       res.send(result);
+    });
+
+    app.get("/users/:id", async (req, res) => {
+      let id = req.params.id;
+      const query = { _id: new ObjectId(id) };
+      const user = await usersCollection.findOne(query);
+      res.send(user);
     });
 
     //2) Post data from FrontEnd
