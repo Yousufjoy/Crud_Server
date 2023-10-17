@@ -1,6 +1,6 @@
 const express = require("express");
 const cors = require("cors");
-const { MongoClient, ServerApiVersion } = require("mongodb");
+const { MongoClient, ServerApiVersion, ObjectId } = require("mongodb");
 const app = express();
 const port = process.env.PORT || 5000;
 
@@ -28,16 +28,28 @@ async function run() {
     const database = client.db("usersDB");
     const usersCollection = database.collection("users");
 
+    //1) Get data from frontEnd
     app.get("/users", async (req, res) => {
       const cursor = usersCollection.find();
       const result = await cursor.toArray();
       res.send(result);
     });
 
+    //2) Post data from FrontEnd
     app.post("/users", async (req, res) => {
       const user = req.body;
       console.log("New user", user);
       const result = await usersCollection.insertOne(user);
+      res.send(result);
+    });
+
+    //3) Delete data from frontEnd
+
+    app.delete("/users/:id", async (req, res) => {
+      const id = req.params.id;
+      console.log("Please delete from db", id);
+      const query = { _id: new ObjectId(id) }; // Ekhane Object id evabe use korte hobe karon data base ei format ase check korte paro!
+      const result = await usersCollection.deleteOne(query);
       res.send(result);
     });
 
