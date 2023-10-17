@@ -36,6 +36,8 @@ async function run() {
       res.send(result);
     });
 
+    //1) Get One users data from frontEnd
+
     app.get("/users/:id", async (req, res) => {
       let id = req.params.id;
       const query = { _id: new ObjectId(id) };
@@ -60,6 +62,29 @@ async function run() {
       //db code
       const query = { _id: new ObjectId(id) }; // Ekhane Object id evabe use korte hobe karon data base ei format ase check korte paro!
       const result = await usersCollection.deleteOne(query);
+      res.send(result);
+    });
+
+    // 4) Update data from frontEnd
+
+    // put thakle update kore na thakle nije theke banay fele
+    app.put("/users/:id", async (req, res) => {
+      const id = req.params.id;
+      const user = req.body;
+      console.log(id, user);
+      const filter = { _id: new ObjectId(id) };
+      const options = { upsert: true };
+      const updatedUser = {
+        $set: {
+          name: user.name,
+          email: user.email,
+        },
+      };
+      const result = await usersCollection.updateOne(
+        filter,
+        updatedUser,
+        options
+      );
       res.send(result);
     });
 
